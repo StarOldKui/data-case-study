@@ -58,8 +58,8 @@ For a detailed walkthrough, [Please Watch This Demo Video](link_to_your_demo_vid
   includes CSV files for **accounts**, **invoice line items**, **invoices**, and **skus** tables, as provided in the
   input dataset.
 
-- **Processed Data Model**: After ETL transformations, the resulting features are stored in the *
-  *data-case-study-processed-data** S3 bucket. Two distinct levels of datasets are created in this process:
+- **Processed Data Model**: After ETL transformations, the resulting features are stored in the
+  **data-case-study-processed-data** S3 bucket. Two distinct levels of datasets are created in this process:
     - **Account-Level Aggregations**: Features aggregated by account ID to provide a summary of each account's
       activities.
     - **Account-Invoice-Level Aggregations**: Detailed features at the invoice level to capture data on individual
@@ -116,7 +116,8 @@ a deeper exploration of individual transaction patterns, enhancing predictive mo
 - **Scheduling**: AWS Glue ETL jobs and Crawlers can be set to run on a scheduled basis (e.g. daily, hourly).
 
 - **Partitioned Data Storage**: The current ETL job design stores processed data based on the job's run date as
-  partitions in S3, structured by `ingest_year`, `ingest_month`, and `ingest_day`. This structure facilitates efficient querying and data
+  partitions in S3, structured by `ingest_year`, `ingest_month`, and `ingest_day`. This structure facilitates efficient
+  querying and data
   organization. By enabling the **Job Bookmark** feature in AWS Glue, the job ensures that only new, unprocessed data is
   handled during each run, preventing duplication and optimizing resource use.
 
