@@ -9,6 +9,19 @@ DATA_DIRECTORY = "../../data/raw"
 
 
 def upload_files_to_s3(directory: str, bucket_name: str) -> None:
+    """
+    Uploads CSV files from a local directory to the specified S3 bucket.
+
+    Prerequisites:
+    - Ensure `aws configure` is run to set up AWS credentials on the local machine.
+     This command sets up the AWS access key, secret access key, and default region,
+     which are necessary for the `boto3` library to authenticate and interact with AWS services.
+    - Run `pip install -r requirements.txt` from the project root to install dependencies, including `boto3`.
+
+    Args:
+       directory (str): The local directory containing the CSV files.
+       bucket_name (str): The name of the S3 bucket to upload to.
+   """
     # Initialize S3 client
     s3_client = boto3.client("s3")
 
