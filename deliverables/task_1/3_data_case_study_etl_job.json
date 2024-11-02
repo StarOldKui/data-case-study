@@ -1,0 +1,1630 @@
+{
+	"jobConfig": {
+		"name": "DataCaseStudyJob",
+		"description": "",
+		"role": "arn:aws:iam::328092891197:role/AWSGlueServiceDataCaseStudyRole",
+		"command": "glueetl",
+		"version": "4.0",
+		"runtime": null,
+		"workerType": "G.1X",
+		"numberOfWorkers": 2,
+		"maxCapacity": 2,
+		"jobRunQueuingEnabled": false,
+		"maxRetries": 0,
+		"timeout": 2880,
+		"maxConcurrentRuns": 1,
+		"security": "none",
+		"scriptName": "DataCaseStudyJob.py",
+		"scriptLocation": "s3://aws-glue-assets-328092891197-ap-southeast-2/scripts/",
+		"language": "python-3",
+		"spark": true,
+		"sparkConfiguration": "standard",
+		"jobParameters": [],
+		"tags": [],
+		"jobMode": "VISUAL_MODE",
+		"createdOn": "2024-10-31T10:36:28.689Z",
+		"developerMode": false,
+		"connectionsList": [],
+		"temporaryDirectory": "s3://aws-glue-assets-328092891197-ap-southeast-2/temporary/",
+		"logging": true,
+		"glueHiveMetastore": true,
+		"etlAutoTuning": true,
+		"metrics": true,
+		"observabilityMetrics": true,
+		"pythonPath": "s3://aws-glue-studio-transforms-234881715811-prod-ap-southeast-2/gs_common.py,s3://aws-glue-studio-transforms-234881715811-prod-ap-southeast-2/gs_derived.py",
+		"bookmark": "job-bookmark-enable",
+		"sparkPath": "s3://aws-glue-assets-328092891197-ap-southeast-2/sparkHistoryLogs/",
+		"flexExecution": false,
+		"minFlexWorkers": null,
+		"maintenanceWindow": null
+	},
+	"dag": {
+		"node-1730376368297": {
+			"nodeId": "node-1730376368297",
+			"dataPreview": false,
+			"previewAmount": 0,
+			"inputs": [
+				"node-1730288018092"
+			],
+			"name": "Select And Rename",
+			"generatedNodeName": "SelectAndRename_node1730376368297",
+			"classification": "Transform",
+			"type": "SqlCode",
+			"sqlAliases": [
+				{
+					"from": "node-1730288018092",
+					"alias": "myDataSource"
+				}
+			],
+			"outputSchemas": [
+				[
+					{
+						"key": "account_id",
+						"fullPath": [
+							"account_id"
+						],
+						"type": "long"
+					},
+					{
+						"key": "invoice_id",
+						"fullPath": [
+							"invoice_id"
+						],
+						"type": "long"
+					},
+					{
+						"key": "feature_invoice_spending",
+						"fullPath": [
+							"feature_invoice_spending"
+						],
+						"type": "double"
+					}
+				]
+			],
+			"parentsValid": true,
+			"calculatedType": "",
+			"sqlQuery": "SELECT \n    a_account_id AS account_id,\n    i_invoice_id AS invoice_id,\n    feature_invoice_spending\nFROM \n    myDataSource;",
+			"codeGenVersion": 2
+		},
+		"node-1730290211222": {
+			"nodeId": "node-1730290211222",
+			"dataPreview": false,
+			"previewAmount": 0,
+			"inputs": [
+				"node-1730512771384"
+			],
+			"name": "Amazon S3",
+			"generatedNodeName": "AmazonS3_node1730290211222",
+			"classification": "DataSink",
+			"type": "S3",
+			"streamingBatchInterval": 100,
+			"format": "glueparquet",
+			"compression": "snappy",
+			"path": "s3://data-case-study-processed-data/account-invoice-level/",
+			"partitionKeys": [
+				"ingest_year",
+				"ingest_month",
+				"ingest_day"
+			],
+			"schemaChangePolicy": {
+				"enableUpdateCatalog": true,
+				"updateBehavior": "UPDATE_IN_DATABASE",
+				"database": "data-case-study-database",
+				"table": "processed-account-invoice-level"
+			},
+			"updateCatalogOptions": "schemaAndPartitions",
+			"autoDataQuality": {
+				"isEnabled": false,
+				"evaluationContext": null
+			},
+			"calculatedType": "",
+			"codeGenVersion": 2
+		},
+		"node-1730266263430": {
+			"nodeId": "node-1730266263430",
+			"dataPreview": false,
+			"previewAmount": 0,
+			"inputs": [
+				"node-1730339889230"
+			],
+			"name": "Joining Date String To Date",
+			"generatedNodeName": "JoiningDateStringToDate_node1730266263430",
+			"classification": "Transform",
+			"type": "SqlCode",
+			"sqlAliases": [
+				{
+					"from": "node-1730339889230",
+					"alias": "myDataSource"
+				}
+			],
+			"outputSchemas": [
+				[
+					{
+						"key": "a_account_id",
+						"fullPath": [
+							"a_account_id"
+						],
+						"type": "bigint",
+						"glueStudioType": null,
+						"children": null
+					},
+					{
+						"key": "a_company_name",
+						"fullPath": [
+							"a_company_name"
+						],
+						"type": "string",
+						"glueStudioType": null,
+						"children": null
+					},
+					{
+						"key": "a_company_address",
+						"fullPath": [
+							"a_company_address"
+						],
+						"type": "string",
+						"glueStudioType": null,
+						"children": null
+					},
+					{
+						"key": "a_contact_person",
+						"fullPath": [
+							"a_contact_person"
+						],
+						"type": "string",
+						"glueStudioType": null,
+						"children": null
+					},
+					{
+						"key": "a_contact_phone",
+						"fullPath": [
+							"a_contact_phone"
+						],
+						"type": "string",
+						"glueStudioType": null,
+						"children": null
+					},
+					{
+						"key": "a_gender",
+						"fullPath": [
+							"a_gender"
+						],
+						"type": "string",
+						"glueStudioType": null,
+						"children": null
+					},
+					{
+						"key": "a_joining_date",
+						"fullPath": [
+							"a_joining_date"
+						],
+						"type": "string",
+						"glueStudioType": null,
+						"children": null
+					},
+					{
+						"key": "a_formatted_joining_date",
+						"fullPath": [
+							"a_formatted_joining_date"
+						],
+						"type": "date",
+						"glueStudioType": null,
+						"children": null
+					}
+				]
+			],
+			"parentsValid": true,
+			"calculatedType": "",
+			"sqlQuery": "-- Use MAKE_DATE to create a valid date field by breaking down and reassembling the `joining_date` string.\r\n-- This approach is necessary because attempting direct date conversion (e.g., TO_DATE(joining_date, 'dd/MM/yyyy'))\r\n-- results in parsing errors due to inconsistent formats like \"3/10/2016\" and \"12/3/2018\".\r\n-- Splitting allows us to manually separate day, month, and year, standardizing the date input.\r\nSELECT \r\n    *,\r\n    MAKE_DATE(\r\n        CAST(SPLIT(a_joining_date, '/')[2] AS INT), -- Year\r\n        CAST(SPLIT(a_joining_date, '/')[1] AS INT), -- Month\r\n        CAST(SPLIT(a_joining_date, '/')[0] AS INT)  -- Day\r\n    ) AS a_formatted_joining_date\r\nFROM myDataSource",
+			"codeGenVersion": 2
+		},
+		"node-1730341255251": {
+			"nodeId": "node-1730341255251",
+			"dataPreview": false,
+			"previewAmount": 0,
+			"inputs": [
+				"node-1730287417740"
+			],
+			"name": "Rename Keys For Skus",
+			"generatedNodeName": "RenameKeysForSkus_node1730341255251",
+			"classification": "Transform",
+			"type": "ApplyMapping",
+			"mapping": [
+				{
+					"toKey": "s_item_id",
+					"fromPath": [
+						"item_id"
+					],
+					"toType": "string",
+					"fromType": "string",
+					"dropped": false,
+					"children": null
+				},
+				{
+					"toKey": "s_item_name",
+					"fromPath": [
+						"item_name"
+					],
+					"toType": "string",
+					"fromType": "string",
+					"dropped": false,
+					"children": null
+				},
+				{
+					"toKey": "s_item_description",
+					"fromPath": [
+						"item_description"
+					],
+					"toType": "string",
+					"fromType": "string",
+					"dropped": false,
+					"children": null
+				},
+				{
+					"toKey": "s_item_cost_price",
+					"fromPath": [
+						"item_cost_price"
+					],
+					"toType": "double",
+					"fromType": "double",
+					"dropped": false,
+					"children": null
+				},
+				{
+					"toKey": "s_item_retail_price",
+					"fromPath": [
+						"item_retail_price"
+					],
+					"toType": "double",
+					"fromType": "double",
+					"dropped": false,
+					"children": null
+				}
+			],
+			"parentsValid": true,
+			"calculatedType": "",
+			"codeGenVersion": 2
+		},
+		"node-1730202354955": {
+			"nodeId": "node-1730202354955",
+			"dataPreview": false,
+			"previewAmount": 0,
+			"inputs": [],
+			"name": "Raw Accounts",
+			"generatedNodeName": "RawAccounts_node1730202354955",
+			"classification": "DataSource",
+			"type": "Catalog",
+			"isCatalog": true,
+			"database": "data-case-study-database",
+			"calculatedType": "",
+			"runtimeParameters": [],
+			"codeGenVersion": 2,
+			"table": "raw-accounts"
+		},
+		"node-1730282322449": {
+			"nodeId": "node-1730282322449",
+			"dataPreview": false,
+			"previewAmount": 0,
+			"inputs": [],
+			"name": "Raw Invoice Line Items",
+			"generatedNodeName": "RawInvoiceLineItems_node1730282322449",
+			"classification": "DataSource",
+			"type": "Catalog",
+			"isCatalog": true,
+			"database": "data-case-study-database",
+			"calculatedType": "",
+			"runtimeParameters": [],
+			"codeGenVersion": 2,
+			"table": "raw-invoice_line_items"
+		},
+		"node-1730287417740": {
+			"nodeId": "node-1730287417740",
+			"dataPreview": false,
+			"previewAmount": 0,
+			"inputs": [],
+			"name": "Raw Skus",
+			"generatedNodeName": "RawSkus_node1730287417740",
+			"classification": "DataSource",
+			"type": "Catalog",
+			"isCatalog": true,
+			"database": "data-case-study-database",
+			"calculatedType": "",
+			"runtimeParameters": [],
+			"codeGenVersion": 2,
+			"table": "raw-skus"
+		},
+		"node-1730287433569": {
+			"nodeId": "node-1730287433569",
+			"dataPreview": false,
+			"previewAmount": 0,
+			"inputs": [
+				"node-1730282353950",
+				"node-1730341255251"
+			],
+			"name": "Left Join Skus",
+			"generatedNodeName": "LeftJoinSkus_node1730287433569",
+			"classification": "Transform",
+			"type": "Join",
+			"joinType": "left",
+			"columns": [
+				{
+					"from": "node-1730282353950",
+					"keys": [
+						"ili_item_id"
+					]
+				},
+				{
+					"from": "node-1730341255251",
+					"keys": [
+						"s_item_id"
+					]
+				}
+			],
+			"columnConditions": [
+				"="
+			],
+			"parentsValid": true,
+			"calculatedType": "",
+			"codeGenVersion": 2
+		},
+		"node-1730339813340": {
+			"nodeId": "node-1730339813340",
+			"dataPreview": false,
+			"previewAmount": 0,
+			"inputs": [
+				"node-1730282322449"
+			],
+			"name": "Rename Keys For Invoice Line Items",
+			"generatedNodeName": "RenameKeysForInvoiceLineItems_node1730339813340",
+			"classification": "Transform",
+			"type": "ApplyMapping",
+			"mapping": [
+				{
+					"toKey": "ili_invoice_id",
+					"fromPath": [
+						"invoice_id"
+					],
+					"toType": "long",
+					"fromType": "long",
+					"dropped": false,
+					"children": null
+				},
+				{
+					"toKey": "ili_item_id",
+					"fromPath": [
+						"item_id"
+					],
+					"toType": "string",
+					"fromType": "string",
+					"dropped": false,
+					"children": null
+				},
+				{
+					"toKey": "ili_quantity",
+					"fromPath": [
+						"quantity"
+					],
+					"toType": "long",
+					"fromType": "long",
+					"dropped": false,
+					"children": null
+				}
+			],
+			"parentsValid": true,
+			"calculatedType": "",
+			"codeGenVersion": 2
+		},
+		"node-1730367532549": {
+			"nodeId": "node-1730367532549",
+			"dataPreview": false,
+			"previewAmount": 0,
+			"inputs": [
+				"node-1730282052674"
+			],
+			"name": "Feature Produce: Average Invoice Interval",
+			"generatedNodeName": "FeatureProduceAverageInvoiceInterval_node1730367532549",
+			"classification": "Transform",
+			"type": "SqlCode",
+			"sqlAliases": [
+				{
+					"from": "node-1730282052674",
+					"alias": "myDataSource"
+				}
+			],
+			"outputSchemas": [
+				[
+					{
+						"key": "a_account_id",
+						"fullPath": [
+							"a_account_id"
+						],
+						"type": "bigint",
+						"glueStudioType": null,
+						"children": null
+					},
+					{
+						"key": "feature_avg_invoice_interval_day",
+						"fullPath": [
+							"feature_avg_invoice_interval_day"
+						],
+						"type": "double",
+						"glueStudioType": null,
+						"children": null
+					}
+				]
+			],
+			"parentsValid": true,
+			"calculatedType": "",
+			"sqlQuery": "SELECT \r\n    a_account_id,\r\n    ROUND(AVG(invoice_interval)) AS feature_avg_invoice_interval_day\r\nFROM (\r\n    SELECT \r\n        a_account_id,\r\n        DATEDIFF(i_date_issued, LAG(i_date_issued) OVER (PARTITION BY a_account_id ORDER BY i_date_issued)) AS invoice_interval\r\n    FROM \r\n        myDataSource\r\n) AS intervals\r\nWHERE invoice_interval IS NOT NULL\r\nGROUP BY \r\n    a_account_id;",
+			"codeGenVersion": 2
+		},
+		"node-1730373959085": {
+			"nodeId": "node-1730373959085",
+			"dataPreview": false,
+			"previewAmount": 0,
+			"inputs": [
+				"node-1730264271503",
+				"node-1730374625697"
+			],
+			"name": "Left Join Total Invoices",
+			"generatedNodeName": "LeftJoinTotalInvoices_node1730373959085",
+			"classification": "Transform",
+			"type": "Join",
+			"joinType": "left",
+			"columns": [
+				{
+					"from": "node-1730264271503",
+					"keys": [
+						"a_account_id"
+					]
+				},
+				{
+					"from": "node-1730374625697",
+					"keys": [
+						"f_t_i_a_account_id"
+					]
+				}
+			],
+			"columnConditions": [
+				"="
+			],
+			"parentsValid": true,
+			"calculatedType": "",
+			"codeGenVersion": 2
+		},
+		"node-1730282052674": {
+			"nodeId": "node-1730282052674",
+			"dataPreview": false,
+			"previewAmount": 0,
+			"inputs": [
+				"node-1730339889230",
+				"node-1730339659157"
+			],
+			"name": "Left Join Invoices",
+			"generatedNodeName": "LeftJoinInvoices_node1730282052674",
+			"classification": "Transform",
+			"type": "Join",
+			"joinType": "left",
+			"columns": [
+				{
+					"from": "node-1730339889230",
+					"keys": [
+						"a_account_id"
+					]
+				},
+				{
+					"from": "node-1730339659157",
+					"keys": [
+						"i_account_id"
+					]
+				}
+			],
+			"columnConditions": [
+				"="
+			],
+			"parentsValid": true,
+			"calculatedType": "",
+			"codeGenVersion": 2
+		},
+		"node-1730281901361": {
+			"nodeId": "node-1730281901361",
+			"dataPreview": false,
+			"previewAmount": 0,
+			"inputs": [],
+			"name": "Raw Invocies",
+			"generatedNodeName": "RawInvocies_node1730281901361",
+			"classification": "DataSource",
+			"type": "Catalog",
+			"isCatalog": true,
+			"database": "data-case-study-database",
+			"calculatedType": "",
+			"runtimeParameters": [],
+			"codeGenVersion": 2,
+			"table": "raw-invoices"
+		},
+		"node-1730339889230": {
+			"nodeId": "node-1730339889230",
+			"dataPreview": false,
+			"previewAmount": 0,
+			"inputs": [
+				"node-1730202354955"
+			],
+			"name": "Rename Keys For Accounts",
+			"generatedNodeName": "RenameKeysForAccounts_node1730339889230",
+			"classification": "Transform",
+			"type": "ApplyMapping",
+			"mapping": [
+				{
+					"toKey": "a_account_id",
+					"fromPath": [
+						"account_id"
+					],
+					"toType": "long",
+					"fromType": "long",
+					"dropped": false,
+					"children": null
+				},
+				{
+					"toKey": "a_company_name",
+					"fromPath": [
+						"company_name"
+					],
+					"toType": "string",
+					"fromType": "string",
+					"dropped": false,
+					"children": null
+				},
+				{
+					"toKey": "a_company_address",
+					"fromPath": [
+						"company_address"
+					],
+					"toType": "string",
+					"fromType": "string",
+					"dropped": false,
+					"children": null
+				},
+				{
+					"toKey": "a_contact_person",
+					"fromPath": [
+						"contact_person"
+					],
+					"toType": "string",
+					"fromType": "string",
+					"dropped": false,
+					"children": null
+				},
+				{
+					"toKey": "a_contact_phone",
+					"fromPath": [
+						"contact_phone"
+					],
+					"toType": "string",
+					"fromType": "string",
+					"dropped": false,
+					"children": null
+				},
+				{
+					"toKey": "a_gender",
+					"fromPath": [
+						"gender"
+					],
+					"toType": "string",
+					"fromType": "string",
+					"dropped": false,
+					"children": null
+				},
+				{
+					"toKey": "a_joining_date",
+					"fromPath": [
+						"joining_date"
+					],
+					"toType": "string",
+					"fromType": "string",
+					"dropped": false,
+					"children": null
+				}
+			],
+			"parentsValid": true,
+			"calculatedType": "",
+			"codeGenVersion": 2
+		},
+		"node-1730374745587": {
+			"nodeId": "node-1730374745587",
+			"dataPreview": false,
+			"previewAmount": 0,
+			"inputs": [
+				"node-1730367532549"
+			],
+			"name": "Renamed keys for Left Join Average Invoice Interval",
+			"generatedNodeName": "RenamedkeysforLeftJoinAverageInvoiceInterval_node1730374745587",
+			"classification": "Transform",
+			"type": "ApplyMapping",
+			"mapping": [
+				{
+					"toKey": "f_a_i_i_account_id",
+					"fromPath": [
+						"a_account_id"
+					],
+					"toType": "long",
+					"fromType": "bigint",
+					"dropped": false,
+					"children": null
+				},
+				{
+					"toKey": "f_a_i_i_feature_avg_invoice_interval_day",
+					"fromPath": [
+						"feature_avg_invoice_interval_day"
+					],
+					"toType": "double",
+					"fromType": "double",
+					"dropped": false,
+					"children": null
+				}
+			],
+			"parentsValid": true,
+			"calculatedType": "",
+			"codeGenVersion": 2
+		},
+		"node-1730247302522": {
+			"nodeId": "node-1730247302522",
+			"dataPreview": false,
+			"previewAmount": 0,
+			"inputs": [
+				"node-1730266263430"
+			],
+			"name": "Feature Produce: Account Age Day",
+			"generatedNodeName": "FeatureProduceAccountAgeDay_node1730247302522",
+			"classification": "Transform",
+			"type": "DynamicTransform",
+			"parameters": [
+				{
+					"name": "colName",
+					"value": [
+						"feature_account_age_day"
+					],
+					"isOptional": false,
+					"type": "str",
+					"listType": null
+				},
+				{
+					"name": "expr",
+					"value": [
+						"DATEDIFF(current_date, a_formatted_joining_date)"
+					],
+					"isOptional": false,
+					"type": "str",
+					"listType": null
+				}
+			],
+			"functionName": "gs_derived",
+			"path": "s3://aws-glue-studio-transforms-234881715811-prod-ap-southeast-2/gs_derived.py",
+			"version": "1.0.0",
+			"transformName": "gs_derived",
+			"outputSchemas": [
+				[
+					{
+						"key": "a_account_id",
+						"fullPath": [
+							"a_account_id"
+						],
+						"type": "bigint",
+						"glueStudioType": null,
+						"children": null
+					},
+					{
+						"key": "a_company_name",
+						"fullPath": [
+							"a_company_name"
+						],
+						"type": "string",
+						"glueStudioType": null,
+						"children": null
+					},
+					{
+						"key": "a_company_address",
+						"fullPath": [
+							"a_company_address"
+						],
+						"type": "string",
+						"glueStudioType": null,
+						"children": null
+					},
+					{
+						"key": "a_contact_person",
+						"fullPath": [
+							"a_contact_person"
+						],
+						"type": "string",
+						"glueStudioType": null,
+						"children": null
+					},
+					{
+						"key": "a_contact_phone",
+						"fullPath": [
+							"a_contact_phone"
+						],
+						"type": "string",
+						"glueStudioType": null,
+						"children": null
+					},
+					{
+						"key": "a_gender",
+						"fullPath": [
+							"a_gender"
+						],
+						"type": "string",
+						"glueStudioType": null,
+						"children": null
+					},
+					{
+						"key": "a_joining_date",
+						"fullPath": [
+							"a_joining_date"
+						],
+						"type": "string",
+						"glueStudioType": null,
+						"children": null
+					},
+					{
+						"key": "a_formatted_joining_date",
+						"fullPath": [
+							"a_formatted_joining_date"
+						],
+						"type": "date",
+						"glueStudioType": null,
+						"children": null
+					},
+					{
+						"key": "feature_account_age_day",
+						"fullPath": [
+							"feature_account_age_day"
+						],
+						"type": "int",
+						"glueStudioType": null,
+						"children": null
+					}
+				]
+			],
+			"parentsValid": true,
+			"calculatedType": "",
+			"codeGenVersion": 2
+		},
+		"node-1730374625697": {
+			"nodeId": "node-1730374625697",
+			"dataPreview": false,
+			"previewAmount": 0,
+			"inputs": [
+				"node-1730332058882"
+			],
+			"name": "Renamed keys for Left Join Total Invoices",
+			"generatedNodeName": "RenamedkeysforLeftJoinTotalInvoices_node1730374625697",
+			"classification": "Transform",
+			"type": "ApplyMapping",
+			"mapping": [
+				{
+					"toKey": "f_t_i_a_account_id",
+					"fromPath": [
+						"a_account_id"
+					],
+					"toType": "long",
+					"fromType": "long",
+					"dropped": false,
+					"children": null
+				},
+				{
+					"toKey": "f_t_i_feature_total_invoices",
+					"fromPath": [
+						"feature_total_invoices"
+					],
+					"toType": "long",
+					"fromType": "long",
+					"dropped": false,
+					"children": null
+				}
+			],
+			"parentsValid": true,
+			"calculatedType": "",
+			"codeGenVersion": 2
+		},
+		"node-1730374109698": {
+			"nodeId": "node-1730374109698",
+			"dataPreview": false,
+			"previewAmount": 0,
+			"inputs": [
+				"node-1730373959085",
+				"node-1730374745587"
+			],
+			"name": "Left Join Average Invoice Interval",
+			"generatedNodeName": "LeftJoinAverageInvoiceInterval_node1730374109698",
+			"classification": "Transform",
+			"type": "Join",
+			"joinType": "left",
+			"columns": [
+				{
+					"from": "node-1730373959085",
+					"keys": [
+						"a_account_id"
+					]
+				},
+				{
+					"from": "node-1730374745587",
+					"keys": [
+						"f_a_i_i_account_id"
+					]
+				}
+			],
+			"columnConditions": [
+				"="
+			],
+			"parentsValid": true,
+			"calculatedType": "",
+			"codeGenVersion": 2
+		},
+		"node-1730281411658": {
+			"nodeId": "node-1730281411658",
+			"dataPreview": false,
+			"previewAmount": 0,
+			"inputs": [
+				"node-1730512575568"
+			],
+			"name": "Amazon S3",
+			"generatedNodeName": "AmazonS3_node1730281411658",
+			"classification": "DataSink",
+			"type": "S3",
+			"streamingBatchInterval": 100,
+			"format": "glueparquet",
+			"compression": "snappy",
+			"path": "s3://data-case-study-processed-data/account-level/",
+			"partitionKeys": [
+				"ingest_year",
+				"ingest_month",
+				"ingest_day"
+			],
+			"schemaChangePolicy": {
+				"enableUpdateCatalog": true,
+				"updateBehavior": "UPDATE_IN_DATABASE",
+				"database": "data-case-study-database",
+				"table": "processed-account-level"
+			},
+			"updateCatalogOptions": "schemaAndPartitions",
+			"autoDataQuality": {
+				"isEnabled": false,
+				"evaluationContext": null
+			},
+			"calculatedType": "",
+			"codeGenVersion": 2
+		},
+		"node-1730282113550": {
+			"nodeId": "node-1730282113550",
+			"dataPreview": false,
+			"previewAmount": 0,
+			"inputs": [
+				"node-1730282052674"
+			],
+			"name": "Feature Produce: Total Invoices",
+			"generatedNodeName": "FeatureProduceTotalInvoices_node1730282113550",
+			"classification": "Transform",
+			"type": "Aggregate",
+			"parentsValid": true,
+			"calculatedType": "",
+			"groups": [
+				"a_account_id"
+			],
+			"aggs": [
+				{
+					"column": "i_invoice_id",
+					"aggFunc": "countDistinct"
+				}
+			],
+			"codeGenVersion": 2
+		},
+		"node-1730264271503": {
+			"nodeId": "node-1730264271503",
+			"dataPreview": false,
+			"previewAmount": 0,
+			"inputs": [
+				"node-1730263713466"
+			],
+			"name": "Feature Produce: Is New Customer",
+			"generatedNodeName": "FeatureProduceIsNewCustomer_node1730264271503",
+			"classification": "Transform",
+			"type": "DynamicTransform",
+			"parameters": [
+				{
+					"name": "colName",
+					"value": [
+						"feature_customer_age_over_one_year"
+					],
+					"isOptional": false,
+					"type": "str",
+					"listType": null
+				},
+				{
+					"name": "expr",
+					"value": [
+						"IF(feature_account_age_year > 1, 1, 0)"
+					],
+					"isOptional": false,
+					"type": "str",
+					"listType": null
+				}
+			],
+			"functionName": "gs_derived",
+			"path": "s3://aws-glue-studio-transforms-234881715811-prod-ap-southeast-2/gs_derived.py",
+			"version": "1.0.0",
+			"transformName": "gs_derived",
+			"outputSchemas": [
+				[
+					{
+						"key": "a_account_id",
+						"fullPath": [
+							"a_account_id"
+						],
+						"type": "bigint",
+						"glueStudioType": null,
+						"children": null
+					},
+					{
+						"key": "a_company_name",
+						"fullPath": [
+							"a_company_name"
+						],
+						"type": "string",
+						"glueStudioType": null,
+						"children": null
+					},
+					{
+						"key": "a_company_address",
+						"fullPath": [
+							"a_company_address"
+						],
+						"type": "string",
+						"glueStudioType": null,
+						"children": null
+					},
+					{
+						"key": "a_contact_person",
+						"fullPath": [
+							"a_contact_person"
+						],
+						"type": "string",
+						"glueStudioType": null,
+						"children": null
+					},
+					{
+						"key": "a_contact_phone",
+						"fullPath": [
+							"a_contact_phone"
+						],
+						"type": "string",
+						"glueStudioType": null,
+						"children": null
+					},
+					{
+						"key": "a_gender",
+						"fullPath": [
+							"a_gender"
+						],
+						"type": "string",
+						"glueStudioType": null,
+						"children": null
+					},
+					{
+						"key": "a_joining_date",
+						"fullPath": [
+							"a_joining_date"
+						],
+						"type": "string",
+						"glueStudioType": null,
+						"children": null
+					},
+					{
+						"key": "a_formatted_joining_date",
+						"fullPath": [
+							"a_formatted_joining_date"
+						],
+						"type": "date",
+						"glueStudioType": null,
+						"children": null
+					},
+					{
+						"key": "feature_account_age_day",
+						"fullPath": [
+							"feature_account_age_day"
+						],
+						"type": "int",
+						"glueStudioType": null,
+						"children": null
+					},
+					{
+						"key": "feature_account_age_year",
+						"fullPath": [
+							"feature_account_age_year"
+						],
+						"type": "double",
+						"glueStudioType": null,
+						"children": null
+					},
+					{
+						"key": "feature_customer_age_over_one_year",
+						"fullPath": [
+							"feature_customer_age_over_one_year"
+						],
+						"type": "int",
+						"glueStudioType": null,
+						"children": null
+					}
+				]
+			],
+			"parentsValid": true,
+			"calculatedType": "",
+			"codeGenVersion": 2
+		},
+		"node-1730263713466": {
+			"nodeId": "node-1730263713466",
+			"dataPreview": false,
+			"previewAmount": 0,
+			"inputs": [
+				"node-1730247302522"
+			],
+			"name": "Feature Pruduce: Account Age Year",
+			"generatedNodeName": "FeaturePruduceAccountAgeYear_node1730263713466",
+			"classification": "Transform",
+			"type": "DynamicTransform",
+			"parameters": [
+				{
+					"name": "colName",
+					"value": [
+						"feature_account_age_year"
+					],
+					"isOptional": false,
+					"type": "str",
+					"listType": null
+				},
+				{
+					"name": "expr",
+					"value": [
+						"ROUND(DATEDIFF(current_date, a_formatted_joining_date) / 365, 2)"
+					],
+					"isOptional": false,
+					"type": "str",
+					"listType": null
+				}
+			],
+			"functionName": "gs_derived",
+			"path": "s3://aws-glue-studio-transforms-234881715811-prod-ap-southeast-2/gs_derived.py",
+			"version": "1.0.0",
+			"transformName": "gs_derived",
+			"outputSchemas": [
+				[
+					{
+						"key": "a_account_id",
+						"fullPath": [
+							"a_account_id"
+						],
+						"type": "bigint",
+						"glueStudioType": null,
+						"children": null
+					},
+					{
+						"key": "a_company_name",
+						"fullPath": [
+							"a_company_name"
+						],
+						"type": "string",
+						"glueStudioType": null,
+						"children": null
+					},
+					{
+						"key": "a_company_address",
+						"fullPath": [
+							"a_company_address"
+						],
+						"type": "string",
+						"glueStudioType": null,
+						"children": null
+					},
+					{
+						"key": "a_contact_person",
+						"fullPath": [
+							"a_contact_person"
+						],
+						"type": "string",
+						"glueStudioType": null,
+						"children": null
+					},
+					{
+						"key": "a_contact_phone",
+						"fullPath": [
+							"a_contact_phone"
+						],
+						"type": "string",
+						"glueStudioType": null,
+						"children": null
+					},
+					{
+						"key": "a_gender",
+						"fullPath": [
+							"a_gender"
+						],
+						"type": "string",
+						"glueStudioType": null,
+						"children": null
+					},
+					{
+						"key": "a_joining_date",
+						"fullPath": [
+							"a_joining_date"
+						],
+						"type": "string",
+						"glueStudioType": null,
+						"children": null
+					},
+					{
+						"key": "a_formatted_joining_date",
+						"fullPath": [
+							"a_formatted_joining_date"
+						],
+						"type": "date",
+						"glueStudioType": null,
+						"children": null
+					},
+					{
+						"key": "feature_account_age_day",
+						"fullPath": [
+							"feature_account_age_day"
+						],
+						"type": "int",
+						"glueStudioType": null,
+						"children": null
+					},
+					{
+						"key": "feature_account_age_year",
+						"fullPath": [
+							"feature_account_age_year"
+						],
+						"type": "double",
+						"glueStudioType": null,
+						"children": null
+					}
+				]
+			],
+			"parentsValid": true,
+			"calculatedType": "",
+			"codeGenVersion": 2
+		},
+		"node-1730282353950": {
+			"nodeId": "node-1730282353950",
+			"dataPreview": false,
+			"previewAmount": 0,
+			"inputs": [
+				"node-1730282052674",
+				"node-1730339813340"
+			],
+			"name": "Left Join Invoice Line Items",
+			"generatedNodeName": "LeftJoinInvoiceLineItems_node1730282353950",
+			"classification": "Transform",
+			"type": "Join",
+			"joinType": "left",
+			"columns": [
+				{
+					"from": "node-1730282052674",
+					"keys": [
+						"i_invoice_id"
+					]
+				},
+				{
+					"from": "node-1730339813340",
+					"keys": [
+						"ili_invoice_id"
+					]
+				}
+			],
+			"columnConditions": [
+				"="
+			],
+			"parentsValid": true,
+			"calculatedType": "",
+			"codeGenVersion": 2
+		},
+		"node-1730288018092": {
+			"nodeId": "node-1730288018092",
+			"dataPreview": false,
+			"previewAmount": 0,
+			"inputs": [
+				"node-1730287433569"
+			],
+			"name": "Feature Produce: Total Invoice Spending",
+			"generatedNodeName": "FeatureProduceTotalInvoiceSpending_node1730288018092",
+			"classification": "Transform",
+			"type": "SqlCode",
+			"sqlAliases": [
+				{
+					"from": "node-1730287433569",
+					"alias": "myDataSource"
+				}
+			],
+			"outputSchemas": [
+				[
+					{
+						"key": "a_account_id",
+						"fullPath": [
+							"a_account_id"
+						],
+						"type": "bigint",
+						"glueStudioType": null,
+						"children": null
+					},
+					{
+						"key": "i_invoice_id",
+						"fullPath": [
+							"i_invoice_id"
+						],
+						"type": "bigint",
+						"glueStudioType": null,
+						"children": null
+					},
+					{
+						"key": "feature_invoice_spending",
+						"fullPath": [
+							"feature_invoice_spending"
+						],
+						"type": "double",
+						"glueStudioType": null,
+						"children": null
+					}
+				]
+			],
+			"parentsValid": true,
+			"calculatedType": "",
+			"sqlQuery": "SELECT \r\n    a_account_id,\r\n    i_invoice_id,\r\n    ROUND(SUM(ili_quantity * s_item_retail_price), 2) AS feature_invoice_spending\r\nFROM \r\n    myDataSource\r\nGROUP BY \r\n    a_account_id, i_invoice_id",
+			"codeGenVersion": 2
+		},
+		"node-1730332058882": {
+			"nodeId": "node-1730332058882",
+			"dataPreview": false,
+			"previewAmount": 0,
+			"inputs": [
+				"node-1730282113550"
+			],
+			"name": "Rename Count Invoice ID",
+			"generatedNodeName": "RenameCountInvoiceID_node1730332058882",
+			"classification": "Transform",
+			"type": "ApplyMapping",
+			"mapping": [
+				{
+					"toKey": "a_account_id",
+					"fromPath": [
+						"a_account_id"
+					],
+					"toType": "long",
+					"fromType": "long",
+					"dropped": false,
+					"children": null
+				},
+				{
+					"toKey": "feature_total_invoices",
+					"fromPath": [
+						"count(i_invoice_id)"
+					],
+					"toType": "long",
+					"fromType": "long",
+					"dropped": false,
+					"children": null
+				}
+			],
+			"parentsValid": true,
+			"calculatedType": "",
+			"codeGenVersion": 2
+		},
+		"node-1730339659157": {
+			"nodeId": "node-1730339659157",
+			"dataPreview": false,
+			"previewAmount": 0,
+			"inputs": [
+				"node-1730281901361"
+			],
+			"name": "Renamed Keys For Invoices",
+			"generatedNodeName": "RenamedKeysForInvoices_node1730339659157",
+			"classification": "Transform",
+			"type": "ApplyMapping",
+			"mapping": [
+				{
+					"toKey": "i_invoice_id",
+					"fromPath": [
+						"invoice_id"
+					],
+					"toType": "long",
+					"fromType": "long",
+					"dropped": false,
+					"children": null
+				},
+				{
+					"toKey": "i_account_id",
+					"fromPath": [
+						"account_id"
+					],
+					"toType": "long",
+					"fromType": "long",
+					"dropped": false,
+					"children": null
+				},
+				{
+					"toKey": "i_date_issued",
+					"fromPath": [
+						"date_issued"
+					],
+					"toType": "string",
+					"fromType": "string",
+					"dropped": false,
+					"children": null
+				}
+			],
+			"parentsValid": true,
+			"calculatedType": "",
+			"codeGenVersion": 2
+		},
+		"node-1730375810837": {
+			"nodeId": "node-1730375810837",
+			"dataPreview": false,
+			"previewAmount": 0,
+			"inputs": [
+				"node-1730374109698"
+			],
+			"name": "Select And Rename",
+			"generatedNodeName": "SelectAndRename_node1730375810837",
+			"classification": "Transform",
+			"type": "SqlCode",
+			"sqlAliases": [
+				{
+					"from": "node-1730374109698",
+					"alias": "myDataSource"
+				}
+			],
+			"outputSchemas": [
+				[
+					{
+						"key": "account_id",
+						"fullPath": [
+							"account_id"
+						],
+						"type": "long"
+					},
+					{
+						"key": "company_name",
+						"fullPath": [
+							"company_name"
+						],
+						"type": "string"
+					},
+					{
+						"key": "company_address",
+						"fullPath": [
+							"company_address"
+						],
+						"type": "string"
+					},
+					{
+						"key": "joining_date",
+						"fullPath": [
+							"joining_date"
+						],
+						"type": "date"
+					},
+					{
+						"key": "feature_account_age_day",
+						"fullPath": [
+							"feature_account_age_day"
+						],
+						"type": "int"
+					},
+					{
+						"key": "feature_account_age_year",
+						"fullPath": [
+							"feature_account_age_year"
+						],
+						"type": "double"
+					},
+					{
+						"key": "feature_customer_age_over_one_year",
+						"fullPath": [
+							"feature_customer_age_over_one_year"
+						],
+						"type": "int"
+					},
+					{
+						"key": "feature_total_invoices",
+						"fullPath": [
+							"feature_total_invoices"
+						],
+						"type": "long"
+					},
+					{
+						"key": "feature_avg_invoice_interval_day",
+						"fullPath": [
+							"feature_avg_invoice_interval_day"
+						],
+						"type": "double"
+					}
+				]
+			],
+			"parentsValid": true,
+			"calculatedType": "",
+			"sqlQuery": "SELECT \r\n    a_account_id AS account_id,\r\n    a_company_name AS company_name,\r\n    a_company_address AS company_address,\r\n    a_formatted_joining_date AS joining_date,\r\n    feature_account_age_day,\r\n    feature_account_age_year,\r\n    feature_customer_age_over_one_year,\r\n    f_t_i_feature_total_invoices AS feature_total_invoices,\r\n    f_a_i_i_feature_avg_invoice_interval_day AS feature_avg_invoice_interval_day\r\nFROM \r\n    myDataSource;",
+			"codeGenVersion": 2
+		},
+		"node-1730512575568": {
+			"classification": "Transform",
+			"type": "SqlCode",
+			"name": "Add Ingest Date",
+			"inputs": [
+				"node-1730375810837"
+			],
+			"sqlAliases": [
+				{
+					"from": "node-1730375810837",
+					"alias": "myDataSource"
+				}
+			],
+			"sqlQuery": "SELECT \n    *,\n    EXTRACT(YEAR FROM CURRENT_DATE) AS ingest_year,\n    EXTRACT(MONTH FROM CURRENT_DATE) AS ingest_month,\n    EXTRACT(DAY FROM CURRENT_DATE) AS ingest_day\n    -- EXTRACT(DAY FROM DATE_ADD(CURRENT_DATE, 1)) AS ingest_day -- Add one day\nFROM myDataSource",
+			"iconUrl": "https://a.b.cdn.console.awsstatic.com/a/v1/A7TI7Y2TVODAQPFMGFXVLD2K4WKW7ONLRNRG2IIGQMHLAJRCPNJQ/static/media/SQL.897bb48d.svg",
+			"generatedNodeName": "AddIngestDate_node1730512575568",
+			"codeGenVersion": 2,
+			"outputSchemas": [
+				[
+					{
+						"key": "account_id",
+						"fullPath": [
+							"account_id"
+						],
+						"type": "long"
+					},
+					{
+						"key": "company_name",
+						"fullPath": [
+							"company_name"
+						],
+						"type": "string"
+					},
+					{
+						"key": "company_address",
+						"fullPath": [
+							"company_address"
+						],
+						"type": "string"
+					},
+					{
+						"key": "joining_date",
+						"fullPath": [
+							"joining_date"
+						],
+						"type": "date"
+					},
+					{
+						"key": "feature_account_age_day",
+						"fullPath": [
+							"feature_account_age_day"
+						],
+						"type": "int"
+					},
+					{
+						"key": "feature_account_age_year",
+						"fullPath": [
+							"feature_account_age_year"
+						],
+						"type": "double"
+					},
+					{
+						"key": "feature_customer_age_over_one_year",
+						"fullPath": [
+							"feature_customer_age_over_one_year"
+						],
+						"type": "int"
+					},
+					{
+						"key": "feature_total_invoices",
+						"fullPath": [
+							"feature_total_invoices"
+						],
+						"type": "long"
+					},
+					{
+						"key": "feature_avg_invoice_interval_day",
+						"fullPath": [
+							"feature_avg_invoice_interval_day"
+						],
+						"type": "double"
+					},
+					{
+						"key": "ingest_year",
+						"fullPath": [
+							"ingest_year"
+						],
+						"type": "int"
+					},
+					{
+						"key": "ingest_month",
+						"fullPath": [
+							"ingest_month"
+						],
+						"type": "int"
+					},
+					{
+						"key": "ingest_day",
+						"fullPath": [
+							"ingest_day"
+						],
+						"type": "int"
+					}
+				]
+			]
+		},
+		"node-1730512771384": {
+			"classification": "Transform",
+			"type": "SqlCode",
+			"name": "Add Ingest Date",
+			"inputs": [
+				"node-1730376368297"
+			],
+			"sqlAliases": [
+				{
+					"from": "node-1730376368297",
+					"alias": "myDataSource"
+				}
+			],
+			"sqlQuery": "SELECT \n    *,\n    EXTRACT(YEAR FROM CURRENT_DATE) AS ingest_year,\n    EXTRACT(MONTH FROM CURRENT_DATE) AS ingest_month,\n    EXTRACT(DAY FROM CURRENT_DATE) AS ingest_day\nFROM myDataSource",
+			"iconUrl": "https://a.b.cdn.console.awsstatic.com/a/v1/A7TI7Y2TVODAQPFMGFXVLD2K4WKW7ONLRNRG2IIGQMHLAJRCPNJQ/static/media/SQL.897bb48d.svg",
+			"generatedNodeName": "AddIngestDate_node1730512771384",
+			"codeGenVersion": 2,
+			"outputSchemas": [
+				[
+					{
+						"key": "account_id",
+						"fullPath": [
+							"account_id"
+						],
+						"type": "long"
+					},
+					{
+						"key": "invoice_id",
+						"fullPath": [
+							"invoice_id"
+						],
+						"type": "long"
+					},
+					{
+						"key": "feature_invoice_spending",
+						"fullPath": [
+							"feature_invoice_spending"
+						],
+						"type": "double"
+					},
+					{
+						"key": "ingest_year",
+						"fullPath": [
+							"ingest_year"
+						],
+						"type": "int"
+					},
+					{
+						"key": "ingest_month",
+						"fullPath": [
+							"ingest_month"
+						],
+						"type": "int"
+					},
+					{
+						"key": "ingest_day",
+						"fullPath": [
+							"ingest_day"
+						],
+						"type": "int"
+					}
+				]
+			]
+		}
+	},
+	"hasBeenSaved": false,
+	"usageProfileName": null
+}

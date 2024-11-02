@@ -1,0 +1,86 @@
+Resources:
+  # Define the S3 bucket for storing raw data
+  DataCaseStudyRawDataBucket:
+    Type: AWS::S3::Bucket
+    Properties:
+      BucketName: data-case-study-raw-data
+      PublicAccessBlockConfiguration:
+        BlockPublicAcls: true             # Block public ACLs for this bucket
+        BlockPublicPolicy: true           # Prevent public policies on this bucket
+        IgnorePublicAcls: true            # Ignore any public ACLs on objects
+        RestrictPublicBuckets: true       # Restrict any public access to this bucket
+
+  # Define the S3 bucket for storing processed data
+  DataCaseStudyProcessedDataBucket:
+    Type: AWS::S3::Bucket
+    Properties:
+      BucketName: data-case-study-processed-data
+      PublicAccessBlockConfiguration:
+        BlockPublicAcls: true             # Block public ACLs for this bucket
+        BlockPublicPolicy: true           # Prevent public policies on this bucket
+        IgnorePublicAcls: true            # Ignore any public ACLs on objects
+        RestrictPublicBuckets: true       # Restrict any public access to this bucket
+
+  # Define the S3 bucket for storing Athena query results
+  DataCaseStudyAthenaQueryBucket:
+    Type: AWS::S3::Bucket
+    Properties:
+      BucketName: data-case-study-athena-query-results
+      PublicAccessBlockConfiguration:
+        BlockPublicAcls: true             # Block public ACLs for this bucket
+        BlockPublicPolicy: true           # Prevent public policies on this bucket
+        IgnorePublicAcls: true            # Ignore any public ACLs on objects
+        RestrictPublicBuckets: true       # Restrict any public access to this bucket
+
+  # Define an IAM Role for AWS Glue with the necessary permissions
+  DataCaseStudyGlueServiceRole:
+    Type: AWS::IAM::Role
+    Properties:
+      RoleName: AWSGlueServiceDataCaseStudyRole
+      AssumeRolePolicyDocument:
+        Version: "2012-10-17"
+        Statement:
+          - Effect: Allow
+            Principal:
+              Service: glue.amazonaws.com
+            Action: sts:AssumeRole
+      ManagedPolicyArns:
+        - arn:aws:iam::aws:policy/service-role/AWSGlueServiceRole
+      Policies:
+        - PolicyName: DataCaseStudyS3BucketAccessPolicy
+          PolicyDocument:
+            Version: "2012-10-17"
+            Statement:
+              - Effect: Allow
+                Action:
+                  - "s3:GetObject"
+                  - "s3:PutObject"
+                Resource:
+                  - "arn:aws:s3:::data-case-study-raw-data/*"
+                  - "arn:aws:s3:::data-case-study-processed-data/*"
+
+  # Define an AWS Glue Database for metadata storage
+  DataCaseStudyGlueDatabase:
+    Type: AWS::Glue::Database
+    Properties:
+      CatalogId: !Ref AWS::AccountId
+      DatabaseInput:
+        Name: data-case-study-database
+
+  # Define an AWS Glue Crawler to scan raw data in S3 and populate the Glue catalog
+  DataCaseStudyGlueCrawler:
+    Type: AWS::Glue::Crawler
+    DependsOn:
+      - DataCaseStudyRawDataBucket           # Ensure the raw data bucket is created first
+      - DataCaseStudyGlueServiceRole         # Ensure the Glue IAM role is created
+      - DataCaseStudyGlueDatabase            # Ensure the Glue database is created
+    Properties:
+      Name: data-case-study-crawler   # Name of the crawler
+      Role: !GetAtt DataCaseStudyGlueServiceRole.Arn  # IAM role ARN for the crawler
+      DatabaseName: data-case-study-database  # Glue database to store table metadata
+      Targets:
+        S3Targets:
+          - Path: s3://data-case-study-raw-data/  # Specify S3 path to crawl raw data
+      TablePrefix: raw-  # Optional prefix for tables created by the crawler in Glue
+      RecrawlPolicy:
+        RecrawlBehavior: CRAWL_EVERYTHING  # Recrawl all data on each crawler run
