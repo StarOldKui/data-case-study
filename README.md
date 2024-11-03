@@ -12,10 +12,18 @@
 
 ## Project Overview
 
-Provide a brief introduction to the project, describing its purpose, key features, and any relevant background
-information. Explain the importance of data processing and analysis for business insights.
+This project involves creating the ETL pipeline using **AWS**. The objective of this assignment is to leverage AWS's
+cloud-native capabilities to build scalable, automated solutions for data ingestion, transformation, and storage,
+supporting various user groups like analysts and finance teams.
 
-TODO: 待补充
+**Task 1:** focuses on building an ETL pipeline using AWS Glue, AWS S3, and other relevant AWS services to process raw
+data into structured formats. The pipeline ensures efficient data processing with features like date-based partitioning
+for querying at different points in time and job bookmarking for optimized performance and cost control.
+
+**Task 2:** designs a production-level system architecture capable of supporting continuous data ingestion and
+transformation using AWS DMS, MSK, and AWS Glue, with data stored in S3 and queried using Athena. This system
+accommodates future CDC (Change Data Capture) capabilities and aligns with best practices for data storage and
+access control, enabling various teams to access the data they need securely and efficiently.
 
 ## Project Structure
 
@@ -30,23 +38,26 @@ data-case-study/
 │       └── skus.csv
 │
 ├── deliveries/                             # Project deliverables and completed tasks
-│   └── task_1/                             # Task 1 files
-│       ├── 1_cloudformation_template.yaml  # CloudFormation template for resources
-│       ├── 2_upload_raw_data_to_s3.py      # Script to upload CSV files to S3
-│       └── 3_data_case_study_etl_job.json  # Configuration for AWS Glue ETL job
+│   ├── task_1/                             # Task 1 files
+│   │   ├── 1_cloudformation_template.yaml  # CloudFormation template for resources
+│   │   ├── 2_upload_raw_data_to_s3.py      # Script to upload CSV files to S3
+│   │   └── 3_data_case_study_etl_job.json  # Configuration for AWS Glue ETL job
+│   └── task_2/                             # Task 2 files
+│       └── diagrams/                       # Architecture diagrams for Task 2
+│           └── task_2_architecture.png
 │
-└── docs/                                   # Documentation and instructions
+└── docs/                                   # Instructions
     └── tasks/
         ├── README-task-one.md
         └── README-tasktwo.txt
-TODO: 待补充
 ```
 
 ## Task 1: Building an ETL pipeline
 
 ### Demo Video
 
-For a detailed walkthrough, [Please Watch This Demo Video](https://drive.google.com/file/d/18wLhQmXfjdaJ5ZA34HUASNA4nI13Z7eR/view?usp=sharing)
+For a detailed
+walkthrough, [Please Watch This Demo Video](https://drive.google.com/file/d/18wLhQmXfjdaJ5ZA34HUASNA4nI13Z7eR/view?usp=sharing)
 
 ### Architecture Diagram
 
@@ -134,12 +145,70 @@ a deeper exploration of individual transaction patterns, enhancing predictive mo
 - **Data Consistency and Schema Evolution**: Glue Crawlers dynamically detect changes in data schema and update the Data
   Catalog.
 
-- **Automation and Workflow Management**: To enhance the automation of the ETL pipeline, AWS Step Functions can be used to create an orchestrated workflow. This approach starts with new data being uploaded to an S3 bucket, triggering an **EventBridge** rule. The rule initiates an AWS Step Functions state machine, which can include the following steps:
-    - **Data Validation**: A Lambda function can be included to validate the data for compliance with required standards. If validation fails, the state machine returns an error, preventing further processing.
-    - **ETL Job Execution**: Upon passing validation, the state machine triggers the AWS Glue Crawler to update the Data Catalog, followed by running the AWS Glue ETL job to process and store the data in S3.
+- **Automation and Workflow Management**: To enhance the automation of the ETL pipeline, AWS Step Functions can be used
+  to create an orchestrated workflow. This approach starts with new data being uploaded to an S3 bucket, triggering an *
+  *EventBridge** rule. The rule initiates an AWS Step Functions state machine, which can include the following steps:
+    - **Data Validation**: A Lambda function can be included to validate the data for compliance with required
+      standards. If validation fails, the state machine returns an error, preventing further processing.
+    - **ETL Job Execution**: Upon passing validation, the state machine triggers the AWS Glue Crawler to update the Data
+      Catalog, followed by running the AWS Glue ETL job to process and store the data in S3.
 
 ## Task 2: System Design
 
 ### Architecture Diagram
 
-...
+<img src="deliverables/task_2/diagrams/task_2_architecture.png" alt="Task 2 Architecture Diagram" width="800"/>
+
+### Architecture Decisions and Rationale
+
+**Source System (AWS Aurora MySQL)**:
+
+- The source team stores operational data in AWS Aurora MySQL.
+
+**AWS Database Migration Service (DMS)**:
+
+- AWS DMS is a managed service for data migration and replication between database systems. It supports Change Data
+  Capture (CDC), enabling the continuous synchronization of data changes from the source to the target system. DMS
+  streams CDC events from Aurora MySQL to AWS Managed Streaming for Apache Kafka (MSK), allowing near real-time
+  processing and ensuring data freshness.
+
+**AWS Managed Streaming for Apache Kafka (MSK)**:
+
+- MSK integrates with Apache Kafka and can be set as the target for DMS, serving as the data source for AWS Glue ETL
+  jobs.
+
+**AWS Glue ETL Job**:
+
+- AWS Glue's Spark-based ETL capabilities enable distributed, scalable data processing. ETL jobs can be scheduled or
+  triggered as needed, with **Job Bookmarks** ensuring only new or changed data is processed, preventing duplication and
+  enhancing efficiency.
+
+**AWS S3**:
+
+- Processed data is stored in S3 using a partitioned structure (e.g.,
+  `ingest_year=2024/ingest_month=11/ingest_day=03/`), facilitating time-based analysis. This method, demonstrated in
+  Task 1, allows for easy retrieval of historical data and meets the requirement of viewing data snapshots over time (
+  e.g., comparing data from one month ago with current data).
+
+- To manage storage costs and enable data retention, S3 lifecycle policies can be applied. These policies move older
+  data to cost-effective storage tiers (e.g., S3 Glacier) after a defined period. By maintaining structured
+  partitions and using these lifecycle rules, the system meets both the analyst's requirement for accessing
+  historical data and the need to optimize storage usage.
+
+- **Finance Team Data Access**: With S3's partitioned storage and Athena's SQL-based querying capabilities, data
+  access can be managed effectively through IAM user groups. By assigning the finance team to a specific IAM user
+  group, permissions can be configured to restrict their access to only the relevant invoice data path (e.g.,
+  `s3://data-case-study-processed-data/invoices/`). This ensures secure, role-based access control, allowing the
+  finance team to query the data they need while maintaining strict data governance.
+
+**AWS Athena**:
+
+- Analysts and the finance team leverage Athena for querying processed data stored in S3. With its integration with the
+  Glue Data Catalog, Athena supports SQL-based queries without needing additional database infrastructure, making it an
+  efficient solution for data analysis.
+
+**Trigger Mechanism**:
+
+- An **EventBridge** rule can be used to trigger ETL jobs when new data is detected in MSK. This automation ensures
+  timely processing and data availability for downstream consumption.
+
