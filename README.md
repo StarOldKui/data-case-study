@@ -46,7 +46,7 @@ TODO: 待补充
 
 ### Demo Video
 
-For a detailed walkthrough, [Please Watch This Demo Video](link_to_your_demo_video)
+For a detailed walkthrough, [Please Watch This Demo Video](https://drive.google.com/file/d/18wLhQmXfjdaJ5ZA34HUASNA4nI13Z7eR/view?usp=sharing)
 
 ### Architecture Diagram
 
@@ -133,6 +133,10 @@ a deeper exploration of individual transaction patterns, enhancing predictive mo
 
 - **Data Consistency and Schema Evolution**: Glue Crawlers dynamically detect changes in data schema and update the Data
   Catalog.
+
+- **Automation and Workflow Management**: To enhance the automation of the ETL pipeline, AWS Step Functions can be used to create an orchestrated workflow. This approach starts with new data being uploaded to an S3 bucket, triggering an **EventBridge** rule. The rule initiates an AWS Step Functions state machine, which can include the following steps:
+    - **Data Validation**: A Lambda function can be included to validate the data for compliance with required standards. If validation fails, the state machine returns an error, preventing further processing.
+    - **ETL Job Execution**: Upon passing validation, the state machine triggers the AWS Glue Crawler to update the Data Catalog, followed by running the AWS Glue ETL job to process and store the data in S3.
 
 ## Task 2: System Design
 
