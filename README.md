@@ -45,6 +45,8 @@ data-case-study/
 │
 ├── deliveries/                             # Project deliverables and completed tasks
 │   ├── task_1/                             # Task 1 files
+│   │   └── diagrams/                       # Architecture diagrams for Task 2
+│   │   │   └── task_1_architecture.png     # Architecture diagrams for Task 1
 │   │   ├── 1_cloudformation_template.yaml  # CloudFormation template for resources
 │   │   ├── 2_upload_raw_data_to_s3.py      # Script to upload CSV files to S3
 │   │   └── 3_data_case_study_etl_job.json  # Configuration for AWS Glue ETL job
@@ -152,8 +154,8 @@ a deeper exploration of individual transaction patterns, enhancing predictive mo
   Catalog.
 
 - **Automation and Workflow Management**: To enhance the automation of the ETL pipeline, AWS Step Functions can be used
-  to create an orchestrated workflow. This approach starts with new data being uploaded to an S3 bucket, triggering an *
-  *EventBridge** rule. The rule initiates an AWS Step Functions state machine, which can include the following steps:
+  to create an orchestrated workflow. This approach starts with new data being uploaded to an S3 bucket, triggering an **EventBridge** 
+  rule. The rule initiates an AWS Step Functions state machine, which can include the following steps:
     - **Data Validation**: A Lambda function can be included to validate the data for compliance with required
       standards. If validation fails, the state machine returns an error, preventing further processing.
     - **ETL Job Execution**: Upon passing validation, the state machine triggers the AWS Glue Crawler to update the Data
