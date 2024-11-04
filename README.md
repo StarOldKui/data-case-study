@@ -9,6 +9,12 @@
     - 3.2 [Architecture Diagram](#architecture-diagram)
     - 3.3 [Intermediate Data Models](#intermediate-data-models)
     - 3.4 [Design Choices and Considerations](#design-choices-and-considerations)
+4. [Task 2: System Design](#task-2-system-design)
+    - 4.1 [Architecture Diagram](#architecture-diagram-1)
+    - 4.2 [Architecture Decisions and Rationale](#architecture-decisions-and-rationale)
+5. [Future consideration: Machine Learning Integration](#future-consideration-machine-learning-integration)
+    - 5.1 [Data Processing for ML](#data-processing-for-ml)
+    - 5.2 [SageMaker Overview](#sagemaker-overview)
 
 ## Project Overview
 
@@ -212,3 +218,20 @@ a deeper exploration of individual transaction patterns, enhancing predictive mo
 - An **EventBridge** rule can be used to trigger ETL jobs when new data is detected in MSK. This automation ensures
   timely processing and data availability for downstream consumption.
 
+## Future consideration: Machine Learning Integration
+
+### Data Processing for ML
+
+Once the data has been processed through the ETL pipeline and stored in S3, it can be prepared for machine learning
+tasks. Preprocessed and structured data provides a foundation for building predictive models and advanced data
+analytics. This allows us to leverage ML to predict whether users will pay their invoices on time.
+
+### SageMaker Overview
+
+**Amazon SageMaker** is a fully managed service that allows developers and data scientists to build, train, and deploy
+machine learning models at scale. SageMaker streamlines the end-to-end machine learning workflow by integrating data
+processing, model training, and deployment within a single platform. It supports popular machine learning frameworks
+such as TensorFlow, PyTorch, and XGBoost, providing flexibility for various use cases.
+
+Once processed data is stored in Amazon S3, it can be seamlessly used for training models in SageMaker. This data acts
+as the input for training algorithms that can learn patterns and make predictions.
