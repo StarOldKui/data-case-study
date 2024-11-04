@@ -45,14 +45,14 @@ data-case-study/
 │
 ├── deliveries/                             # Project deliverables and completed tasks
 │   ├── task_1/                             # Task 1 files
-│   │   └── diagrams/                       # Architecture diagrams for Task 1
+│   │   └── diagrams/                       
 │   │   │   └── task_1_architecture.png     # Architecture diagrams for Task 1
 │   │   ├── 1_cloudformation_template.yaml  # CloudFormation template for resources
 │   │   ├── 2_upload_raw_data_to_s3.py      # Script to upload CSV files to S3
 │   │   └── 3_data_case_study_etl_job.json  # Configuration for AWS Glue ETL job
 │   └── task_2/                             # Task 2 files
-│       └── diagrams/                       # Architecture diagrams for Task 2
-│           └── task_2_architecture.png
+│       └── diagrams/                       
+│           └── task_2_architecture.png     # Architecture diagrams for Task 2
 │
 └── docs/                                   # Instructions
     └── tasks/
