@@ -45,7 +45,7 @@ data-case-study/
 │
 ├── deliveries/                             # Project deliverables and completed tasks
 │   ├── task_1/                             # Task 1 files
-│   │   └── diagrams/                       # Architecture diagrams for Task 2
+│   │   └── diagrams/                       # Architecture diagrams for Task 1
 │   │   │   └── task_1_architecture.png     # Architecture diagrams for Task 1
 │   │   ├── 1_cloudformation_template.yaml  # CloudFormation template for resources
 │   │   ├── 2_upload_raw_data_to_s3.py      # Script to upload CSV files to S3
@@ -237,3 +237,7 @@ such as TensorFlow, PyTorch, and XGBoost, providing flexibility for various use 
 
 Once processed data is stored in Amazon S3, it can be seamlessly used for training models in SageMaker. This data acts
 as the input for training algorithms that can learn patterns and make predictions.
+
+## Additional Resources
+
+This link directs you to the tool I use for drawing architecture diagrams: [My Eraser Workspace](https://app.eraser.io/workspace/L2VZkM7HJcsb6SeJrkZd?origin=share).
