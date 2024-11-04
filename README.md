@@ -15,6 +15,7 @@
 5. [Future consideration: Machine Learning Integration](#future-consideration-machine-learning-integration)
     - 5.1 [Data Processing for ML](#data-processing-for-ml)
     - 5.2 [SageMaker Overview](#sagemaker-overview)
+6. [Additional Resources](#additional-resources)
 
 ## Project Overview
 
